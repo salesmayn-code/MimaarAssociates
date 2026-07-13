@@ -1,6 +1,17 @@
+"use client"
+
+import { useState, type FormEvent } from "react"
 import { MapPin, Phone, Mail, Globe } from "lucide-react"
 
 export function Footer() {
+  const [email, setEmail] = useState("")
+  const [feedback, setFeedback] = useState("")
+  async function subscribe(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setFeedback("Subscribing…")
+    const response = await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) })
+    const result = await response.json()
+    if (response.ok) { setFeedback(result.message || "You are subscribed."); setEmail("") } else setFeedback(result.error || "Unable to subscribe.")
+  }
   return (
     <footer className="bg-primary text-primary-foreground border-t border-border">
       <div className="container mx-auto px-4 py-12">
@@ -83,6 +94,11 @@ export function Footer() {
                 <span className="opacity-80">mimaarassociate.com</span>
               </div>
             </div>
+            <form onSubmit={subscribe} className="space-y-2">
+              <label htmlFor="newsletter-email" className="text-sm font-medium">Newsletter</label>
+              <div className="flex gap-2"><input id="newsletter-email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" className="min-w-0 flex-1 rounded-md border border-primary-foreground/30 bg-transparent px-3 py-2 text-sm" /><button type="submit" className="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground">Join</button></div>
+              {feedback && <p className="text-xs opacity-80" aria-live="polite">{feedback}</p>}
+            </form>
           </div>
         </div>
 

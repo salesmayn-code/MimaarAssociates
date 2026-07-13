@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Award, Users, Building, ChevronDown } from "lucide-react"
 import { FadeIn } from "@/components/animations/fade-in"
 import { TextReveal } from "@/components/animations/text-reveal"
+import Image from "next/image"
 
 export function HeroSection() {
   return (
@@ -24,12 +25,11 @@ export function HeroSection() {
 
             <FadeIn delay={0.4}>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="group bg-primary text-primary-foreground hover:bg-primary/90">
-                  Get Started
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <Button asChild size="lg" className="group bg-primary text-primary-foreground hover:bg-primary/90">
+                  <a href="#contact">Get Started<ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" /></a>
                 </Button>
-                <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/10">
-                  View Portfolio
+                <Button asChild variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/10">
+                  <a href="#projects">View Portfolio</a>
                 </Button>
               </div>
             </FadeIn>
@@ -64,10 +64,13 @@ export function HeroSection() {
           <FadeIn delay={0.4} className="relative h-full">
             <div className="relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-muted">
-                <img
+                <Image
                   src="/modern-construction-site-with-cranes-and-buildings.jpg"
                   alt="Construction site in Islamabad"
                   className="w-full h-full object-cover"
+                  width={1200}
+                  height={900}
+                  priority
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-card p-6 rounded-xl shadow-lg border border-border">

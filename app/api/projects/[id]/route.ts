@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { auth } from "@/auth"
+import { isAdmin } from "@/lib/admin"
 import { projectSchema } from "@/lib/validations"
 
 type RouteContext = {
@@ -47,9 +47,7 @@ export async function GET(req: Request, context: RouteContext) {
 
 export async function PUT(req: Request, context: RouteContext) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -123,9 +121,7 @@ export async function PUT(req: Request, context: RouteContext) {
 
 export async function DELETE(req: Request, context: RouteContext) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

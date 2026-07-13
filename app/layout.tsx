@@ -4,12 +4,12 @@ import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google"
 
 const jakarta = Plus_Jakarta_Sans({ 
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-jakarta",
 })
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-playfair",
 })
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"

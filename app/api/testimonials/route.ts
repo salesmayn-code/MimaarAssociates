@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { auth } from "@/auth"
+import { isAdmin } from "@/lib/admin"
 import { testimonialSchema } from "@/lib/validations"
 
 export async function GET() {
@@ -22,9 +22,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -57,9 +55,7 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -111,9 +107,7 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

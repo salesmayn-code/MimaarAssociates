@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
+import { isAdmin } from "@/lib/admin"
 import { writeFile, mkdir } from "fs/promises"
 import path from "path"
 import crypto from "crypto"
@@ -21,9 +21,7 @@ const MIME_TO_EXT: Record<string, string> = {
 
 export async function POST(req: Request) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

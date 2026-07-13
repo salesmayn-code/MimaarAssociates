@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { auth } from "@/auth"
+import { isAdmin } from "@/lib/admin"
 import { settingSchema } from "@/lib/validations"
 import { z } from "zod"
+
+export const dynamic = "force-dynamic"
 
 export async function GET(req: Request) {
   try {
@@ -11,7 +13,7 @@ export async function GET(req: Request) {
 
     // Single setting by key — public access
     if (key) {
-      const setting = await db.setting.findUnique({
+      const setting = await db.siteSetting.findUnique({
         where: { key },
       })
 
@@ -26,16 +28,14 @@ export async function GET(req: Request) {
     }
 
     // All settings — admin only
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       )
     }
 
-    const settings = await db.setting.findMany({
+    const settings = await db.siteSetting.findMany({
       orderBy: { key: "asc" },
     })
 
@@ -51,9 +51,7 @@ export async function GET(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -77,7 +75,7 @@ export async function PUT(req: Request) {
 
     const updated = await Promise.all(
       result.data.map((setting) =>
-        db.setting.upsert({
+        db.siteSetting.upsert({
           where: { key: setting.key },
           update: { value: setting.value },
           create: { key: setting.key, value: setting.value },

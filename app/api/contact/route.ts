@@ -8,9 +8,9 @@ import {
   contactConfirmationEmail,
 } from "@/lib/email-templates"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM_ADDRESS = "Mimaar Associates <onboarding@resend.dev>"
-const ADMIN_EMAIL = "mimaarassociates@gmail.com"
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+const FROM_ADDRESS = process.env.EMAIL_FROM || "Mimaar Associates <onboarding@resend.dev>"
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "mimaarassociates@gmail.com"
 
 export async function POST(req: Request) {
   try {
@@ -50,26 +50,28 @@ export async function POST(req: Request) {
     })
 
     // Send notification email to admin
-    await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: ADMIN_EMAIL,
-      subject: `New Contact Form Submission from ${data.name}`,
-      html: contactNotificationEmail({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        service: data.service,
-        message: data.message,
-      }),
-    })
+    if (resend) {
+      await resend.emails.send({
+        from: FROM_ADDRESS,
+        to: ADMIN_EMAIL,
+        subject: `New Contact Form Submission from ${data.name}`,
+        html: contactNotificationEmail({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          service: data.service,
+          message: data.message,
+        }),
+      })
 
-    // Send confirmation email to user
-    await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: data.email,
-      subject: "Thank you for contacting Mimaar Associates",
-      html: contactConfirmationEmail({ name: data.name }),
-    })
+      // Send confirmation email to user
+      await resend.emails.send({
+        from: FROM_ADDRESS,
+        to: data.email,
+        subject: "Thank you for contacting Mimaar Associates",
+        html: contactConfirmationEmail({ name: data.name }),
+      })
+    }
 
     return NextResponse.json(
       { success: true, id: submission.id },

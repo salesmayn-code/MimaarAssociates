@@ -55,7 +55,7 @@ export function ServicesSection() {
         <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <StaggerItem key={index}>
-              <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full">
+              <Card className="group h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:[transform:perspective(900px)_rotateX(2deg)_rotateY(-2deg)]">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="p-3 rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">

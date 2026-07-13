@@ -6,14 +6,17 @@ async function main() {
 
   // ─── Seed Admin User ─────────────────────────────────────────────────────────
 
-  const passwordHash = await hash("Admin@123", 12)
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || "admin@mimaarassociates.com"
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD
+  if (!adminPassword) throw new Error("SEED_ADMIN_PASSWORD must be set before running the seed script")
+  const passwordHash = await hash(adminPassword, 12)
 
   const admin = await db.user.upsert({
-    where: { email: "admin@mimaarassociates.com" },
+    where: { email: adminEmail },
     update: {},
     create: {
       name: "Admin",
-      email: "admin@mimaarassociates.com",
+      email: adminEmail,
       passwordHash,
       role: "SUPER_ADMIN",
     },

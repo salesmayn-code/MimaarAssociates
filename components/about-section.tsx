@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 import { FadeIn } from "@/components/animations/fade-in"
 import { CountUp } from "@/components/animations/count-up"
+import { ParallaxImage } from "@/components/animations/parallax-image"
 
 const features = [
   "Licensed and insured professionals",
@@ -45,15 +46,16 @@ export function AboutSection() {
           <FadeIn direction="up" delay={0.2}>
             <div className="relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-muted shadow-xl border border-border/50">
-                <img
+                <ParallaxImage
                   src="/professional-construction-team-working-on-a-modern.jpg"
                   alt="Professional construction team"
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                 />
               </div>
               <div className="absolute -top-6 -right-6 bg-secondary text-secondary-foreground p-6 rounded-xl shadow-lg border border-secondary-foreground/10">
                 <div className="text-3xl font-bold flex items-center">
-                  <CountUp to={15} />+
+                  <CountUp end={15} />+
                 </div>
                 <div className="text-sm font-medium opacity-90">Years of Excellence</div>
               </div>

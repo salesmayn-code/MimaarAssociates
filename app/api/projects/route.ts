@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { auth } from "@/auth"
+import { isAdmin } from "@/lib/admin"
 import { projectSchema } from "@/lib/validations"
 
 export async function GET(req: Request) {
@@ -53,9 +53,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const session = await auth()
-
-    if (!session) {
+    if (!(await isAdmin())) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

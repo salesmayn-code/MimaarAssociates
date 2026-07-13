@@ -5,8 +5,8 @@ import { newsletterSchema } from "@/lib/validations"
 import { newsletterLimiter, getClientIp } from "@/lib/rate-limit"
 import { newsletterWelcomeEmail } from "@/lib/email-templates"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM_ADDRESS = "Mimaar Associates <onboarding@resend.dev>"
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+const FROM_ADDRESS = process.env.EMAIL_FROM || "Mimaar Associates <onboarding@resend.dev>"
 
 export async function POST(req: Request) {
   try {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const { email } = result.data
 
     // Check if already subscribed
-    const existing = await db.newsletterSubscriber.findUnique({
+      const existing = await db.subscriber.findUnique({
       where: { email },
     })
 
@@ -48,18 +48,20 @@ export async function POST(req: Request) {
       }
 
       // Reactivate inactive subscriber
-      await db.newsletterSubscriber.update({
+      await db.subscriber.update({
         where: { email },
         data: { isActive: true },
       })
 
       // Send welcome email on reactivation
-      await resend.emails.send({
-        from: FROM_ADDRESS,
-        to: email,
-        subject: "Welcome Back to Mimaar Associates!",
-        html: newsletterWelcomeEmail(),
-      })
+      if (resend) {
+        await resend.emails.send({
+          from: FROM_ADDRESS,
+          to: email,
+          subject: "Welcome Back to Mimaar Associates!",
+          html: newsletterWelcomeEmail(),
+        })
+      }
 
       return NextResponse.json(
         { success: true, message: "Subscription reactivated" },
@@ -68,17 +70,19 @@ export async function POST(req: Request) {
     }
 
     // Create new subscriber
-    await db.newsletterSubscriber.create({
+    await db.subscriber.create({
       data: { email },
     })
 
     // Send welcome email
-    await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: email,
-      subject: "Welcome to Mimaar Associates Newsletter!",
-      html: newsletterWelcomeEmail(),
-    })
+    if (resend) {
+      await resend.emails.send({
+        from: FROM_ADDRESS,
+        to: email,
+        subject: "Welcome to Mimaar Associates Newsletter!",
+        html: newsletterWelcomeEmail(),
+      })
+    }
 
     return NextResponse.json(
       { success: true, message: "Successfully subscribed" },

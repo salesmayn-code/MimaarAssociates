@@ -4,10 +4,12 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Menu, X, Phone, Mail } from "lucide-react"
+import { DarkModeToggle } from "@/components/shared/dark-mode-toggle"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState("home")
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +17,16 @@ export function Header() {
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible) setActiveSection(visible.target.id)
+    }, { rootMargin: "-25% 0px -60% 0px", threshold: [0.1, 0.4] })
+    const sections = ["home", "services", "about", "projects", "contact"].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+    sections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -43,26 +55,24 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-foreground hover:text-secondary transition-colors">
+            <a href="#home" className={activeSection === "home" ? "text-secondary" : "text-foreground hover:text-secondary transition-colors"}>
               Home
             </a>
-            <a href="#services" className="text-foreground hover:text-secondary transition-colors">
+            <a href="#services" className={activeSection === "services" ? "text-secondary" : "text-foreground hover:text-secondary transition-colors"}>
               Services
             </a>
-            <a href="#about" className="text-foreground hover:text-secondary transition-colors">
+            <a href="#about" className={activeSection === "about" ? "text-secondary" : "text-foreground hover:text-secondary transition-colors"}>
               About
             </a>
-            <a href="#projects" className="text-foreground hover:text-secondary transition-colors">
+            <a href="#projects" className={activeSection === "projects" ? "text-secondary" : "text-foreground hover:text-secondary transition-colors"}>
               Projects
             </a>
-            <a href="#contact" className="text-foreground hover:text-secondary transition-colors">
+            <a href="#contact" className={activeSection === "contact" ? "text-secondary" : "text-foreground hover:text-secondary transition-colors"}>
               Contact
             </a>
           </nav>
 
-          <Button className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90" size="sm">
-            Get Quote
-          </Button>
+          <div className="hidden md:flex items-center gap-2"><DarkModeToggle /><Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90" size="sm"><a href="#contact">Get Quote</a></Button></div>
 
           {/* Mobile menu button */}
           <Button variant="ghost" size="sm" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -96,9 +106,8 @@ export function Header() {
                 <a href="#contact" className="text-foreground hover:text-secondary transition-colors" onClick={() => setIsMenuOpen(false)}>
                   Contact
                 </a>
-                <Button className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90" size="sm">
-                  Get Quote
-                </Button>
+                <Button asChild className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90" size="sm"><a href="#contact" onClick={() => setIsMenuOpen(false)}>Get Quote</a></Button>
+                <div className="flex items-center justify-between border-t border-border pt-3"><span className="text-sm text-muted-foreground">Appearance</span><DarkModeToggle /></div>
               </div>
             </motion.nav>
           )}

@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+const imageUrl = z.string().refine((value) => value.startsWith("/") || /^https?:\/\//.test(value), "Image URL must be an absolute URL or local path")
+
 export const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
   email: z.string().email("Invalid email address"),
@@ -22,7 +24,7 @@ export const projectSchema = z.object({
   isActive: z.boolean().optional().default(true),
   completedAt: z.string().datetime().optional().nullable(),
   images: z.array(z.object({
-    url: z.string().url(),
+    url: imageUrl,
     alt: z.string().optional(),
     order: z.number().int().optional().default(0),
   })).optional().default([]),
@@ -42,7 +44,7 @@ export const testimonialSchema = z.object({
   role: z.string().optional(),
   content: z.string().min(10).max(1000),
   rating: z.number().int().min(1).max(5).optional().default(5),
-  avatar: z.string().url().optional().nullable(),
+  avatar: imageUrl.optional().nullable(),
   isActive: z.boolean().optional().default(true),
 })
 
