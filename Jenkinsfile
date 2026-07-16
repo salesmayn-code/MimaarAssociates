@@ -43,8 +43,8 @@ pipeline {
 
         stage('Prisma Generate + Migrate') {
             steps {
-                sh 'pnpm dlx prisma generate'
-                sh 'pnpm dlx prisma migrate deploy'
+                sh 'pnpm exec prisma generate'
+                sh 'pnpm exec prisma migrate deploy'
             }
         }
 
