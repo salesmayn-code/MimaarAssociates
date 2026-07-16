@@ -9,25 +9,25 @@ import { FadeIn } from "@/components/animations/fade-in"
 
 const testimonials = [
   {
-    name: "Ahmad Khan",
+    name: "Muhammad Ali",
     role: "Homeowner, DHA Phase II",
     content: "Mimaar Associates built our dream home with unparalleled attention to detail. The gold-standard quality and professionalism they brought to every phase of construction was truly remarkable.",
     rating: 5,
   },
   {
-    name: "Sarah Ali",
+    name: "Basit Khan",
     role: "CEO, TechVentures",
     content: "The interior design team transformed our office space into a modern, inspiring environment. Their commitment to the timeline and budget was impressive. Highly recommended!",
     rating: 5,
   },
   {
-    name: "Usman Tariq",
+    name: "Saleh",
     role: "Property Investor",
     content: "I've partnered with Mimaar Associates on multiple commercial projects. Their deep understanding of the Islamabad market and flawless execution make them the best in the business.",
     rating: 5,
   },
   {
-    name: "Fatima Noor",
+    name: "Ahmed",
     role: "Villa Owner",
     content: "Our villa renovation was handled perfectly. The navy and gold accents they suggested added an elegant, premium feel to our living space. A fantastic experience overall.",
     rating: 5,
