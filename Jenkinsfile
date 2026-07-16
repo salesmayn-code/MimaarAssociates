@@ -57,6 +57,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                cat > $DEPLOY_DIR/.env << ENVEOF
+                    DATABASE_URL=${DATABASE_URL}
+                    NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+                ENVEOF
                     rsync -a --delete --exclude=".git" --exclude="node_modules" ./ $DEPLOY_DIR/
                     cd $DEPLOY_DIR
                     pnpm install --frozen-lockfile --prod
