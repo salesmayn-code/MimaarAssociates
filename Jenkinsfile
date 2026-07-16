@@ -56,12 +56,12 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                sh 'printf "DATABASE_URL=%s\\nNEXTAUTH_SECRET=%s\\n" "$DATABASE_URL" "$NEXTAUTH_SECRET" > $DEPLOY_DIR/.env'
+                sh 'rsync -a --delete --exclude=".git" --exclude="node_modules" --exclude=".env" ./ $DEPLOY_DIR/'
                 sh '''
-                    printf "DATABASE_URL=%s\\nNEXTAUTH_SECRET=%s\\n" "$DATABASE_URL" "$NEXTAUTH_SECRET" > $DEPLOY_DIR/.env
-                    rsync -a --delete --exclude=".git" --exclude="node_modules" ./ $DEPLOY_DIR/
                     cd $DEPLOY_DIR
                     pnpm install --frozen-lockfile --prod
-                    pm2 restart mimaar-app || pm2 start pnpm --name mimaar-app -- start
+                    pm2 restart mimaar-app --cwd $DEPLOY_DIR || pm2 start pnpm --name mimaar-app --cwd $DEPLOY_DIR -- start
                     pm2 save
                 '''
             }
