@@ -31,7 +31,7 @@ pipeline {
 
         stage('Lint') {
             steps {
-                sh 'pnpm lint || true'
+                sh 'pnpm lint'
             }
         }
 
