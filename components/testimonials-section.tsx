@@ -69,7 +69,7 @@ export function TestimonialsSection() {
             <h2 className="text-3xl lg:text-4xl font-bold text-balance mb-4">Client Testimonials</h2>
             <div className="h-1 w-20 bg-secondary mx-auto mb-6 rounded-full" />
             <p className="text-xl text-slate-300 text-pretty max-w-2xl mx-auto">
-              Don't just take our word for it. Hear what our valued clients have to say about our work.
+              Don&apos;t just take our word for it. Hear what our valued clients have to say about our work.
             </p>
           </div>
         </FadeIn>
@@ -91,7 +91,7 @@ export function TestimonialsSection() {
                         </div>
                         
                         <p className="text-slate-300 leading-relaxed mb-8 flex-grow relative z-10 italic">
-                          "{testimonial.content}"
+                          &quot;{testimonial.content}&quot;
                         </p>
                         
                         <div className="mt-auto">

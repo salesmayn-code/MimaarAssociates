@@ -9,7 +9,7 @@ export default function NotFound() {
         Page Not Found
       </h2>
       <p className="mt-4 text-muted-foreground max-w-md">
-        We couldn't find the page you're looking for. It might have been moved or doesn't exist.
+        We couldn&apos;t find the page you&apos;re looking for. It might have been moved or doesn&apos;t exist.
       </p>
       <div className="mt-8 flex justify-center gap-4">
         <Button asChild className="bg-secondary text-primary hover:bg-secondary/90">

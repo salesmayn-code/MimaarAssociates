@@ -1,6 +1,10 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 
+type UserWithRole = {
+  role?: string
+}
+
 export async function requireAuth() {
   const session = await auth()
   if (!session?.user) {
@@ -11,7 +15,8 @@ export async function requireAuth() {
 
 export async function requireAdmin() {
   const session = await requireAuth()
-  if ((session.user as any).role !== "ADMIN" && (session.user as any).role !== "SUPER_ADMIN") {
+  const { role } = session.user as UserWithRole
+  if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
     redirect("/")
   }
   return session
