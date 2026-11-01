@@ -128,6 +128,10 @@ Checkout
   → Deploy (rsync to /var/www/mimaar, PM2 restart, pm2 save)
 ```
 
+![Jenkins delivery pipeline overview](docs/screenshots/pipeline.png)
+
+*Pipeline overview from the portfolio visualization.*
+
 Jenkins credentials `database-url` and `nextauth-secret` are injected as
 environment variables. The deployment target is configured through `DEPLOY_DIR`
 and is served by Nginx with PM2 supervising the application process.
